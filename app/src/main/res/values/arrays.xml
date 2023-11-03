@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="info">
+        <item>@string/default_info</item>
+
+    </string-array>
+    <string-array name="college">
+        <item>计算机学院</item>
+        <item>电气学院</item>
+    </string-array>
+    
+    <string-array name="computer">
+        <item>软件工程</item>
+        <item>信息安全</item>
+        <item>物联网</item>
+    </string-array>
+    <string-array name="electric">
+        <item>电气工程</item>
+        <item>电机工程</item>
+    </string-array>
+    <string-array name="hobby">
+        <item>文学</item>
+        <item>体育</item>
+        <item>音乐</item>
+        <item>美术</item>
+    </string-array>
+</resources>

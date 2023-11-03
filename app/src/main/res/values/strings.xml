@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">StudentMgr</string>
+    <string name="name">张广园</string>
+    <string name="college">计算机科学与通信工程学院</string>
+    <string name="subject">软件工程</string>
+    <string name="default_info">张广园\n计算机科学与通信工程学院\n软件工程</string>
+    <string name="collegeInfo">请选择你的学院</string>
+    <string name="subjectInfo">请选择你的专业</string>
+    <string name="username">zgy</string>
+    <string name="password">123456</string>
+    <string name="btnAdd">添加学生</string>
+    <string name="studentImageInfo">张广园的帅照</string>
+    <string name="add_item">增加</string>
+    <string name="refresh_item">刷新</string>
+    <string name="edit_item">编辑</string>
+    <string name="delete_item">删除</string>
+    <string name="skip_button_text">跳过广告（%d秒）</string>
+    <string name="toast_info">%s了以下信息\\n%s</string>
+    <string name="btnSearch">查询学生</string>
+    <string name="search_name">姓名</string>
+    <string name="search_college">所在学院</string>
+    <string name="search_subject">所在专业</string>
+    <string name="btnSearch1">开始查询</string>
+</resources>

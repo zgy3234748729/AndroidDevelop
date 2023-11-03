@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ActivityLogin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_height="wrap_content" >
+
+            <!--用户名-->
+            <EditText
+                android:id="@+id/userName"
+                android:layout_width="153dp"
+                android:layout_height="wrap_content"
+                android:hint="用户名" />
+            <!--密码-->
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="153dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:inputType="textPassword"
+                android:hint="密码"/>
+
+            <!--登录-->
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="153dp"
+                android:layout_height="wrap_content"
+                android:text="登录"
+                android:layout_marginTop="30dp" />
+        </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginTop="600dp" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>
