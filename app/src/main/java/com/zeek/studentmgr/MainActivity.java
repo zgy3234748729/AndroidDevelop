@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -20,17 +22,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
-    private ArrayAdapter<String> adapter;
+    private StudentAdapter adapter;
     private static List<String> studentInfo = new ArrayList<>();
     private int editPosition = studentInfo.size();
+    private boolean isSearch = false;
+    //设置一个变量来接收查询结果
+    private static ArrayList<String> resultList = new ArrayList<>();
+
+    //数据库工具类
+    private DBOpenHelper dbOpenHelper;           //定义DBOpenHelper
 
     private AlertDialog alertDialog;        //弹窗
 
@@ -42,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(view -> {
             toAddStudentView();
         });
+
+        //新建一个数据库
+        dbOpenHelper = new DBOpenHelper(MainActivity.this, "stu.db", null, 1);
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
         // 获取之前的editPosition值，如果没有则默认为0
         int editPosition = getEditPosition();
@@ -60,47 +75,19 @@ public class MainActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_LONG);       //设置持续时间
 
 
-        //传递进来的值
-        String studentMessage = getIntent().getStringExtra("studentMessage");
+        //TODO:主页面需要完成三个功能
+        //1：正常情况下显示所有学生，即点击添加学生按钮后，添加完学生，返回来之后，显示所有学生
+        ArrayList<String> allStudent = dbOpenHelper.getAllStudentInfo(db);
 
-        if (studentMessage != null) {
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, studentInfo);
-            listView.setAdapter(adapter);
-            Toast.makeText(MainActivity.this, "填写学生信息完成,studentInfo=" + studentInfo.size() + "editPosition" + editPosition,
-                    Toast.LENGTH_SHORT).show();
+        //将查询出来的结果让入适配器
+        adapter = new StudentAdapter(this, allStudent);
+        listView.setAdapter(adapter);
+        //通知适配器修改值
+        adapter.notifyDataSetChanged();
 
-            //将接收到的字符串
-            for (int i = 0; i < studentInfo.size(); i++) {
-                System.out.println(studentInfo.get(i));
-            }
+        //2：长按listview之后，编辑学生，修改学生在数据库中的值
 
-
-            //添加
-            if (editPosition >= studentInfo.size()) {
-                studentInfo.add(studentMessage);
-                textView.setText(getString(R.string.toast_info, "添加", studentInfo.get(editPosition)));
-            } else {
-                //修改
-                studentInfo.set(editPosition, studentMessage);
-                textView.setText(getString(R.string.toast_info, "修改", studentInfo.get(editPosition)));
-            }
-            toast.setView(toastView);
-            toast.show();
-            adapter.notifyDataSetChanged();
-
-        }
-
-
-        listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            setEditPosition(position);
-            int editPosition1 = getEditPosition();
-            Toast.makeText(MainActivity.this, "长按问题,editPosition1=" + editPosition1, Toast.LENGTH_SHORT).show();
-            registerForContextMenu(listView); // 注册上下文菜单
-            openContextMenu(listView); // 打开上下文菜单
-            return true;
-        });
-
-        //查询学生信息按钮
+        //3：点击查询学生之后，更新适配器
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(v -> {
             //创建列表对话框对象
@@ -113,11 +100,32 @@ public class MainActivity extends AppCompatActivity {
             //设置对话框的其他属性
             builder.setTitle("查询学生");
             builder.setPositiveButton("查询", (dialog, which) -> {
-                String name = ((EditText)findViewById(R.id.search_name)).getText().toString();
-                String college = ((EditText)findViewById(R.id.search_college)).getText().toString();
-                String subject = ((EditText)findViewById(R.id.search_subject)).getText().toString();
-                //
+                String name = ((EditText) searchStudentView.findViewById(R.id.search_name)).getText().toString();
+                String college = ((EditText) searchStudentView.findViewById(R.id.search_college)).getText().toString();
+                String subject = ((EditText) searchStudentView.findViewById(R.id.search_subject)).getText().toString();
+                //查询是否有这样的学生
+                String[] info = {name, college, subject};
+                resultList = dbOpenHelper.searchStudent(db,info);
+                if (resultList.size() == 0) {       ///如果数据库中没有数据
+                    //显示提示信息，没有相关记录，不清空listview
+                    Toast.makeText(MainActivity.this, "很遗憾，没有相关学生！", Toast.LENGTH_LONG).show();
+                } else {
+                    //修改适配器，实现查询页面
+                    adapter = new StudentAdapter(this, resultList);
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
             });
+            builder.create().show();
+        });
+
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            setEditPosition(position);
+            int editPosition1 = getEditPosition();
+            Toast.makeText(MainActivity.this, "长按问题,editPosition1=" + editPosition1, Toast.LENGTH_SHORT).show();
+            registerForContextMenu(listView); // 注册上下文菜单
+            openContextMenu(listView); // 打开上下文菜单
+            return true;
         });
     }
 
@@ -205,6 +213,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void showToast() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbOpenHelper != null) {
+            dbOpenHelper.close();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 重新查询数据库获取学生信息并更新ListView
+        ArrayList<String> allStudent = dbOpenHelper.getAllStudentInfo(dbOpenHelper.getReadableDatabase());
+        adapter = new StudentAdapter(this, allStudent);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 }

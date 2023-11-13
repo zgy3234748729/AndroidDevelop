@@ -28,6 +28,10 @@ public class ActivityStudent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
+        //新建数据库引用
+        dbOpenHelper = new DBOpenHelper(ActivityStudent.this, "stu.db", null, 1);
+
+
         //获取引用
         Spinner collegeSpinner = (Spinner) findViewById(R.id.collegeSpinner);
         Spinner subjectSpinner = (Spinner) findViewById(R.id.subjectSpinner);
@@ -105,7 +109,7 @@ public class ActivityStudent extends AppCompatActivity {
             insertData(dbOpenHelper.getReadableDatabase(), name, college, subject, studentMessage);
             //使用Intent传递数据到MainActivity
             Intent intent = new Intent(ActivityStudent.this, MainActivity.class);
-            intent.putExtra("studentMessage",studentMessage);
+//            intent.putExtra("studentMessage",studentMessage);
             startActivity(intent);
         });
 
@@ -124,7 +128,7 @@ public class ActivityStudent extends AppCompatActivity {
         values.put("name", name);       //保存姓名
         values.put("college", college); //保存学院
         values.put("subject", subject); //专业
-        values.put("message", message); //完整信息
+        values.put("student_info", message); //完整信息
         readableDatabase.insert("stu", null, values);//执行插入操作
     }
 }
