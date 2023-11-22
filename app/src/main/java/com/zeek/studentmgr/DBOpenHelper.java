@@ -14,8 +14,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     final String CREATE_TABLE_SQL =
             "create table stu(_id integer primary key autoincrement, name, college, subject, student_info)";
 
-    // 定义表的备份名
-    final String DELETE_TABLE_SQL = "drop table stu";
 
     public DBOpenHelper(Context context, String name,
                         SQLiteDatabase.CursorFactory factory, int version) {
@@ -50,6 +48,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         cursor.close();
         return resultList;
     }
+
+    // 增加学生信息
 
     @Override
     public void onCreate(SQLiteDatabase db) {

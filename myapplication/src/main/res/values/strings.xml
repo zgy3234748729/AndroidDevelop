@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TestAbout</string>
+    <string name="activityabout">跳转到ActivityAbout</string>
+</resources>

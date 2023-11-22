@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private static String TGA = "zeekJet";
     private ListView listView;
     private StudentAdapter adapter;
     private static List<String> studentInfo = new ArrayList<>();
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TGA, "------onCreate------");
         Button btn = findViewById(R.id.btnAdd);
         btn.setOnClickListener(view -> {
             toAddStudentView();
@@ -85,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
         //通知适配器修改值
         adapter.notifyDataSetChanged();
 
-        //2：长按listview之后，编辑学生，修改学生在数据库中的值
+        //2：TODO:长按listview之后，编辑学生，修改学生在数据库中的值
+
+
 
         //3：点击查询学生之后，更新适配器
         Button btnSearch = findViewById(R.id.btnSearch);
@@ -126,6 +131,14 @@ public class MainActivity extends AppCompatActivity {
             registerForContextMenu(listView); // 注册上下文菜单
             openContextMenu(listView); // 打开上下文菜单
             return true;
+        });
+
+        // TODO:显示开发人员信息
+        TextView toDeveloperTextview = findViewById(R.id.to_developer_info);
+        toDeveloperTextview.setOnClickListener(v -> {
+            //跳转到开发者信息页面
+            Intent intent = new Intent(MainActivity.this, ActivityAbout.class);
+            startActivity(intent);
         });
     }
 
@@ -221,17 +234,44 @@ public class MainActivity extends AppCompatActivity {
         if (dbOpenHelper != null) {
             dbOpenHelper.close();
         }
+        Log.d(TGA, "------onDestroy------");
     }
+
+    @Override
+    protected  void onStart() {
+        super.onStart();
+        Log.d(TGA, "------onStart------");
+    }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.d(TGA, "------onResume------");
         // 重新查询数据库获取学生信息并更新ListView
         ArrayList<String> allStudent = dbOpenHelper.getAllStudentInfo(dbOpenHelper.getReadableDatabase());
         adapter = new StudentAdapter(this, allStudent);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected  void onPause() {
+        super.onPause();
+        Log.d(TGA, "------onPause------");
+    }
+
+    @Override
+    protected  void onStop() {
+        super.onStop();
+        Log.d(TGA, "------onStop------");
+    }
+
+    @Override
+    protected  void onRestart() {
+        super.onRestart();
+        Log.d(TGA, "------onRestart------");
     }
 
 }

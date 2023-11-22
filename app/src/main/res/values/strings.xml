@@ -21,4 +21,9 @@
     <string name="search_college">所在学院</string>
     <string name="search_subject">所在专业</string>
     <string name="btnSearch1">开始查询</string>
+    <string name="zgy_name">张广园</string>
+    <string name="zgy_email">3234748729@qq.com</string>
+    <string name="zgy_telephone">18888061675</string>
+    <string name="to_developer_textView">查看开发者信息</string>
+    <string name="save_password_checkBox">保存密码</string>
 </resources>

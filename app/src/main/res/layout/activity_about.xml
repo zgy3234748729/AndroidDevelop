@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ActivityAbout">
+    <!-- 输入简介 -->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextAbout"
+        android:layout_centerInParent="true"
+        android:hint="输入简介" />
+
+    <!-- 保存按钮 -->
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextAbout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:text="保存" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+        <!--姓名-->
+        <TextView
+            android:id="@+id/developer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zgy_name" />
+        <!--邮箱-->
+        <TextView
+            android:id="@+id/developer_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/zgy_email" />
+        <!--电话号码-->
+        <TextView
+            android:id="@+id/developer_telephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/zgy_telephone" />
+    </LinearLayout>
+
+</RelativeLayout>

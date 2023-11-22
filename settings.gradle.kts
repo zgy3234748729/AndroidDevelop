@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "StudentMgr"
 include(":app")
- 
+include(":app:testabout")
+include(":myapplication")
